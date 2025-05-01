@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { AuthUser } from './middlewares/authMiddleware.js'
+import {saveUserDetails} from './service/userService.js'
 
 const app = express()
 
@@ -15,8 +16,10 @@ app.get('/status', (req, res) => {
   res.status(200).send({ message: 'Server is running!' })
 })
 
+app.post('/userInfo/save', saveUserDetails);
+
 // Authorized Routes
-app.get('/auth', AuthUser, (req, res) => {
+app.get('/api', AuthUser, (req, res) => {
   res.status(200).send({ message: 'You are Authorized to Acccess' })
 })
 

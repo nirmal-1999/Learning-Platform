@@ -10,21 +10,12 @@ const userSchema = mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
-    unique: true,
-    index: true,
+    required: true
   },
-  firstname: {
+  name: {
     type: String,
     trim: true,
-  },
-  lastname: {
-    type: String,
-    trim: true,
-  },
-  dp: {
-    type: String,
-  },
+  }
 })
 
 const User = mongoose.model('User', userSchema)
