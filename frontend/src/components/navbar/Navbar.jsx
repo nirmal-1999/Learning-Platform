@@ -1,8 +1,41 @@
 import React, { useEffect, useState } from "react";
 import UserDropdown from "./UserDropdown.jsx";
 import { Link } from "react-router-dom";
+import AddCourseModal from "../models/AddCourseModal .jsx";
+import axios from "axios";
 
 function Navbar() {
+	const [name, setName] = useState("");
+	const [addCourseModalOpen, setAddCourseModalOpen] = useState(false);
+	const username = localStorage.getItem("username");
+
+	const handleAddCourse = async (formData) => {
+
+		const [hours, minutes] = formData.duration.split(":");
+		const formattedDuration = `${parseInt(hours)}h ${parseInt(minutes)}m`;
+
+		const imagePath = `/images/${formData.image.name}`;
+
+		const payload = {
+			username,
+			author_name: name,
+			department: formData.department,
+			course_name: formData.course_name,
+			image: imagePath,
+			duration: formattedDuration,
+		};
+
+		try {
+			await axios.post(`${import.meta.env.VITE_BACKEND_URL}/courses/add`, payload);
+			alert("Course added successfully!");
+			setAddCourseModalOpen(false)
+		} catch (error) {
+			console.error("Error adding course:", error);
+			alert("Failed to add course.");
+			setAddCourseModalOpen(false)
+		}
+	};
+
 
 	return (
 		<>
@@ -12,15 +45,24 @@ function Navbar() {
 					<Link to="/home" className="hover:text-indigo-600">
 						Home
 					</Link>
+					<button className="hover:text-indigo-600" onClick={() => setAddCourseModalOpen(true)}>
+						Add Course
+					</button>
 					<Link to="/courses" className="hover:text-indigo-600">
 						Courses
 					</Link>
 					<a href="#" className="hover:text-indigo-600">
 						About
 					</a>
-					<UserDropdown />
+					<UserDropdown name={name} setName={setName} />
 				</div>
 			</nav>
+
+			<AddCourseModal
+				isOpen={addCourseModalOpen}
+				onClose={() => setAddCourseModalOpen(false)}
+				onSubmit={handleAddCourse}
+			/>
 		</>
 	);
 }

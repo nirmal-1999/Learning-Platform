@@ -8,4 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  server: {
+    proxy: {
+      '/learn-easy': 'http://localhost:8085'
+    }
+  }
 })

@@ -17,14 +17,19 @@ function TopCourses({ title, courses }) {
         }
     };
 
+    const handleViewAll = () => {
+        const slug = title.toLowerCase().replace(/\s+/g, '-');
+        navigate(`/courses/view/${slug}`, {
+            state: {title: title, courses: courses}
+        })
+    }
+
     return (
         <div className="bg-white pt-3 m-6 rounded-xl shadow-md relative">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold ml-10">{title}</h2>
                 <div className="flex items-center text-blue-600 mr-3 cursor-pointer hover:underline">
-                    <span className="mr-1" onClick={(e) => navigate("/view-course-list", {
-                        state: {title: title, courses: courses}
-                    })}>
+                    <span className="mr-1" onClick={handleViewAll}>
                         View All
                     </span>
                     <ArrowRight size={18} />

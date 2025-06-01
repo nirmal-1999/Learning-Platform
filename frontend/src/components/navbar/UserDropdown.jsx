@@ -3,12 +3,11 @@ import { initKeycloak, logOut, login } from "../../service/KeycloakService.js";
 import {ArrowLeftCircle, ArrowRightCircle, BookOpen, User, ShoppingCart, Settings, HelpCircle} from 'lucide-react';
 
 
-export default function UserDropdown() {
+export default function UserDropdown({name, setName}) {
 
 	const [open, setOpen] = useState(false);
 	const dropdownRef = useRef(null);
 	const [authenticated, setAuthenticated] = useState(false);
-	const [name, setName] = useState("");
 	const initials = name.split(' ').map(word => word[0]).join('').toUpperCase();
 
 	useEffect(() => {

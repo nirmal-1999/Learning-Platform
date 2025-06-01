@@ -15,22 +15,33 @@ const initKeycloak = ({setAuthenticated, setName}) => {
 
                 const userInfo = keycloak.tokenParsed;
                 setName(userInfo.name);
-                // console.log(JSON.stringify(userInfo));
+                console.log(JSON.stringify(userInfo));
 
                 const flag = localStorage.getItem("userRegister");
                 if(!flag) {
-                    fetch('http://localhost:5000/userInfo/save', {
+                    const request = {
+                        username: userInfo.preferred_username,
+                        email: userInfo.email,
+                        name: userInfo.name,
+                        role: userInfo.userRole,
+                        email_verified: userInfo.email_verified
+                    };
+
+                    console.log("request: ", JSON.stringify(request))
+
+                    fetch(`${import.meta.env.VITE_BACKEND_URL}/users/save`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${keycloak.token}`
                         },
-                        body: JSON.stringify(userInfo)
+                        body: JSON.stringify(request)
                     })
                         .then(res => res.json())
                         .then(data => {
                             console.log("User data saved to database");
                             localStorage.setItem("userRegister", true);
+                            localStorage.setItem("username", data.username);
+                            localStorage.setItem("role", data.role);
                         })
                         .catch(err => console.error(err));
                 }
